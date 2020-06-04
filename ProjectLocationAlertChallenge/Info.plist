@@ -47,6 +47,12 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Please share your location with us</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Please share your locaiton with us</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Please share your location with us</string>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
