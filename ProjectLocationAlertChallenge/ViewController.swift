@@ -10,7 +10,6 @@ import UIKit
 import CoreLocation
 import MapKit
 
-
 class ViewController: UIViewController {
 
     let randomButtom = UIButton()
@@ -19,6 +18,7 @@ class ViewController: UIViewController {
     let locationManager = CLLocationManager()
     var userLocation : CLLocation?
     var homeLocation : CLLocation?
+    let homeAddress = "1 Infinite Loop, Cupertino, CA"
         
     let padding : CGFloat = 20
     
@@ -58,7 +58,7 @@ class ViewController: UIViewController {
     func configureLabel() {
         view.addSubview(titleLabel)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.text = "Go Neon! Mask Localized POC"
+        titleLabel.text = "Go Neon! Mask Alert POC"
         titleLabel.font = UIFont.systemFont(ofSize: 30, weight: .black)
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.textColor = .label
@@ -79,7 +79,6 @@ class ViewController: UIViewController {
         randomButtom.backgroundColor = .systemBlue
         randomButtom.addTarget(self, action: #selector(randomButtomTapped), for: .touchUpInside)
         
-        
         NSLayoutConstraint.activate([
             randomButtom.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: padding),
             randomButtom.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
@@ -90,6 +89,9 @@ class ViewController: UIViewController {
     
     @objc func randomButtomTapped() {
         print("buttom tapped")
+        if let homeFromAdressLocation = getLocationFrom(address: homeAddress) {
+            print(homeFromAdressLocation)
+        }
         guard let homeLocation = homeLocation else { return }
         userLocation = CLLocation(latitude: Double.random(in: 6.0001...6.0010), longitude: Double.random(in: 6.0001...6.0010))
         let distanceInMeters = userLocation!.distance(from: homeLocation).rounded()
@@ -126,7 +128,26 @@ class ViewController: UIViewController {
             }
         }
     }
+    
+    func getLocationFrom(address: String) -> CLLocation? {
 
+        let geoCoder = CLGeocoder()
+        
+        var location : CLLocation?
+        geoCoder.geocodeAddressString(address) { (placemarks, error) in
+            guard
+                let placemarks = placemarks,
+                placemarks.first?.location != nil
+            else {
+                // handle no location found
+                return
+            }
+
+            location = placemarks.first?.location
+        }
+        return location
+    }
+    
 }
 
 extension ViewController: CLLocationManagerDelegate {
@@ -149,13 +170,13 @@ extension ViewController: UNUserNotificationCenterDelegate {
         center.removeAllPendingNotificationRequests()
         
         let content = UNMutableNotificationContent()
-        content.title = "Hey friend"
-        content.body = "Remember to be safe when you are outside, stay safe. Be cool!"
+        content.title = "Olá amigx"
+        content.body = "Neon lembra você de usar a máscara fora de casa e manter distância social. 😉 😷"
         content.categoryIdentifier = "alarm"
-        content.userInfo = ["customData":"fizzbuzz"]
+        content.userInfo = ["customData":"xpto"]
         content.sound = .default
         
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 6, repeats: false)
         
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
         center.add(request)
@@ -166,10 +187,7 @@ extension ViewController: UNUserNotificationCenterDelegate {
         center.delegate = self
         
         let showNotificationAction = UNNotificationAction(identifier: "show", title: "Tell me more", options: .foreground)
-//        let remindMeLaterNotificationAction = UNNotificationAction(identifier: "remindMeLater", title: "Remind me later", options: .foreground)
-        
         let category = UNNotificationCategory(identifier: "alarm", actions: [showNotificationAction], intentIdentifiers: [])
-//        let categoryRemindMeLater = UNNotificationCategory(identifier: "alarm", actions: [remindMeLaterNotificationAction], intentIdentifiers: [])
         
         center.setNotificationCategories([category])
     }
