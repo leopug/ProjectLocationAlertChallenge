@@ -170,7 +170,7 @@ extension ViewController: UNUserNotificationCenterDelegate {
         center.removeAllPendingNotificationRequests()
         
         let content = UNMutableNotificationContent()
-        content.title = "Olá amigx"
+        content.title = "Olá Neowner!"
         content.body = "Neon lembra você de usar a máscara fora de casa e manter distância social. 😉 😷"
         content.categoryIdentifier = "alarm"
         content.userInfo = ["customData":"xpto"]
